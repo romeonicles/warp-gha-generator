@@ -6,35 +6,37 @@ on:
 jobs:
   generate:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # Включает Node 24 сейчас
 
     permissions:
       contents: read
       actions: write  # нужно для удаления артефакта
 
     steps:
-      - uses: actions/checkout@v4
+    - uses: actions/checkout@v5  # Обновлено с v4
 
-      - name: Set artifact name
-        id: vars
-        run: echo "artifact_name=warp-$(date -u +%m%d-%H%M%S)" >> $GITHUB_OUTPUT
+    - name: Set artifact name
+      id: vars
+      run: echo "artifact_name=warp-$(date -u +%m%d-%H%M%S)" >> $GITHUB_OUTPUT
 
-      - name: Run warp_generator
-        run: bash warp_generator_gha.sh
+    - name: Run warp_generator
+      run: bash warp_generator_gha.sh
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ steps.vars.outputs.artifact_name }}
-          path: output/
-          retention-days: 1
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v6  # Обновлено с v4
+      with:
+        name: ${{ steps.vars.outputs.artifact_name }}
+        path: output/
+        retention-days: 1
 
-      # --- пауза 10 минут ---
-      - name: Wait 10 minutes
-        run: sleep 600
+    # --- пауза 10 минут ---
+    - name: Wait 10 minutes
+      run: sleep 600
 
-      # --- удаление артефакта ---
-      - name: Delete artifact
-        uses: geekyeggo/delete-artifact@v4
-        with:
-          name: ${{ steps.vars.outputs.artifact_name }}
-          failOnError: false
+    # --- удаление артефакта ---
+    - name: Delete artifact
+      uses: geekyeggo/delete-artifact@v5  # Обновлено с v4
+      with:
+        name: ${{ steps.vars.outputs.artifact_name }}
+        failOnError: false
