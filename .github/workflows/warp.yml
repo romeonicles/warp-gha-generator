@@ -36,7 +36,7 @@ jobs:
 
     # --- удаление артефакта ---
     - name: Delete artifact
-      uses: geekyeggo/delete-artifact@v5  # Обновлено с v4
+      uses: geekyeggo/delete-artifact@v6  # Обновлено с v4
       with:
         name: ${{ steps.vars.outputs.artifact_name }}
         failOnError: false
